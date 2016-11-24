@@ -36,6 +36,7 @@ Example Usage
  * **Getting some help**
  
     C:\>RunPSScript -help
+    
     RunPSScript.exe - Run, schedule and elevate a PowerShell command - v1.0.0.0
     Copyright (c) 2016 Laurent Le Guillermic. All rights reserved.
     Usage:
