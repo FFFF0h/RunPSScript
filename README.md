@@ -25,13 +25,9 @@ Licenses
 | Module                   | Author                | License         |
 |--------------------------|-----------------------|-----------------|
 | RunPSScript              | Laurent Le Guillermic | 2016 Apache 2.0 |
-|--------------------------|-----------------------|-----------------|
 | named-pipe-wrapper       | Andrew C. Dvorak      | 2013 MIT        |
-|--------------------------|-----------------------|-----------------|
 | CSharpTest.Net.Processes | Roger Knapp           | 2014 Apache 2.0 |
-|--------------------------|-----------------------|-----------------|
 | ProcessPrivileges        | Nick Lowe             | 2009 Copyright? |
-|--------------------------|-----------------------|-----------------|
 | Task Parallel Library    | Jim Borden (Couchbase)| 2015 Apache 2.0 |
 
 
