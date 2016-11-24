@@ -12,7 +12,7 @@ Requires .Net Framework 3.5. Licensed under Apache 2.0.
 
 Main Features
 -------------
- * **Execute Powershell script** - Can execute PowerShell script block or file.
+ * **Execute Powershell script or command** - Can execute PowerShell script block or file.
  * **Input Pipeline** - The input pipeline of RunPSScript is exposed to the PowerShell script as is.
  * **Output Pipeline** - The output pipeline of RunPSScript is the same one as the Powershell script.
  * **Elevated Privileges** - Can run the script with elevated privileges.
