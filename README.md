@@ -35,34 +35,34 @@ Example Usage
 -------------
  * **Getting some help**
  
-    C:\>RunPSScript -help
+        C:\>RunPSScript -help
     
-    RunPSScript.exe - Run, schedule and elevate a PowerShell command - v1.0.0.0
-    Copyright (c) 2016 Laurent Le Guillermic. All rights reserved.
-    Usage:
-    echo hi | RunPSScript.exe -Script .\hello.ps1 [-Version (1|2|3)] [-Domain HashedADSLOCAL] [-UserName HashedJohn] [-Password HashedPwd] [-Elevated] [-Schedule 10] [-Silent] [-Debug]
-    RunPSScript.exe -Hash V3ryS3cureP4sswOrd
-    With:
-        -Script         The PS script or command. Required.
-        -Version        Powershell version 1, 2 or 3. Default is 2.
-        -Domain         Hashed account domain name used to run the command.
-        -UserName       Hashed account user name used to run the command.
-        -Password       Hashed account password used to run the command.
-        -Elevated       Runs the command with elevated privileges.
-        -Schedule       Executes the command every x.x minutes.
-        -Silent         Do not show any error messages.
-        -Debug          Create a log file containing debug informations.
-        -NoLogo         Starts without displaying the copyright banner.
-        -Hash           Generate a system unique hashed string.`
+        RunPSScript.exe - Run, schedule and elevate a PowerShell command - v1.0.0.0
+        Copyright (c) 2016 Laurent Le Guillermic. All rights reserved.
+        Usage:
+        echo hi | RunPSScript.exe -Script .\hello.ps1 [-Version (1|2|3)] [-Domain HashedADSLOCAL] [-UserName HashedJohn] [-Password HashedPwd] [-Elevated] [-Schedule 10] [-Silent] [-Debug]
+        RunPSScript.exe -Hash V3ryS3cureP4sswOrd
+        With:
+            -Script         The PS script or command. Required.
+            -Version        Powershell version 1, 2 or 3. Default is 2.
+            -Domain         Hashed account domain name used to run the command.
+            -UserName       Hashed account user name used to run the command.
+            -Password       Hashed account password used to run the command.
+            -Elevated       Runs the command with elevated privileges.
+            -Schedule       Executes the command every x.x minutes.
+            -Silent         Do not show any error messages.
+            -Debug          Create a log file containing debug informations.
+            -NoLogo         Starts without displaying the copyright banner.
+            -Hash           Generate a system unique hashed string.`
 
 * **Hash a password**
 
-    C:\>RunPSScript -hash My_Super_Secure_Password
+        C:\>RunPSScript -hash My_Super_Secure_Password
 
 * **Pipe in, Pipe out with exit code**
 
-    C:\>echo "This is an input pipeline" | RunPSScript -script "& {$Input | %{ $_ }; Exit $LastExitCode; }"
+        C:\>echo "This is an input pipeline" | RunPSScript -script "& {$Input | %{ $_ }; Exit $LastExitCode; }"
 
 * **Execute a PS script with elevated privileges every 1min30sec and do not report errors**
 
-    C:\>RunPSScript -script .\MyScript.ps1 -elevated -Schedule 1.5 -Silent
+        C:\>RunPSScript -script .\MyScript.ps1 -elevated -Schedule 1.5 -Silent
