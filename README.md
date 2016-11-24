@@ -1,7 +1,7 @@
 RunPSScript
 ===========
 
-Runs a Powershell script or command using any version of PowerShell engine, scheduled at regular intervals, with elevated privileges and/or under any account.
+Runs a PowerShell script or command using any version of PowerShell engine, scheduled at regular intervals, with elevated privileges and/or under any account.
 
 About
 -----
