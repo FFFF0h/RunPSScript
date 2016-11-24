@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+//
+//  RunPSScript.csproj
+//
+//  Author:
+//  	Laurent Le Guillermic (https://github.com/FFFF0h)
+//
+//  Copyright (c) 2016 Laurent Le Guillermic All rights reserved.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+-->
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C1BDDB14-B2C9-4D1A-AA9E-032E4D4529ED}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RunPSScript</RootNamespace>
+    <AssemblyName>RunPSScript</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET_3_5;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NET_3_5;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>RunPSScript.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>publickey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Security\Processes\AccessTokenHandle.cs" />
+    <Compile Include="Security\Processes\AllocatedMemory.cs" />
+    <Compile Include="Security\Processes\Enums.cs" />
+    <Compile Include="Security\Principal\Impersonater.cs" />
+    <Compile Include="NamedPipes\IO\PipeStreamReader.cs" />
+    <Compile Include="NamedPipes\IO\PipeStreamWrapper.cs" />
+    <Compile Include="NamedPipes\IO\PipeStreamWriter.cs" />
+    <Compile Include="NamedPipes\NamedPipeClient.cs" />
+    <Compile Include="NamedPipes\NamedPipeConnection.cs" />
+    <Compile Include="NamedPipes\NamedPipeServer.cs" />
+    <Compile Include="NamedPipes\PipeExceptionEventHandler.cs" />
+    <Compile Include="NamedPipes\PipeServerFactory.cs" />
+    <Compile Include="NamedPipes\Threading\Worker.cs" />
+    <Compile Include="Processes\Commands\ArgumentList.cs" />
+    <Compile Include="Processes\IO\TempFile.cs" />
+    <Compile Include="Collections\OrdinalCaseInsensitiveComparer.cs" />
+    <Compile Include="Processes\Processes\AssemblyRunner.cs" />
+    <Compile Include="Processes\Processes\IRunner.cs" />
+    <Compile Include="Processes\Processes\ProcessExitedEventArgs.cs" />
+    <Compile Include="Processes\Processes\ProcessOutputEventArgs.cs" />
+    <Compile Include="Processes\Processes\ProcessRunner.cs" />
+    <Compile Include="Processes\Processes\ScriptEngine.cs" />
+    <Compile Include="Processes\Processes\ScriptRunner.cs" />
+    <Compile Include="RunPSScriptEngine.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Processes\Shared\Check.cs" />
+    <Compile Include="Processes\Utils\RegexPatterns.cs" />
+    <Compile Include="Security\Cryptography\StringCipher.cs" />
+    <Compile Include="Security\Processes\NativeEnums.cs" />
+    <Compile Include="Security\Processes\NativeMethods.cs" />
+    <Compile Include="Security\Processes\NativeStructs.cs" />
+    <Compile Include="Security\Processes\PrivilegeAndAttributes.cs" />
+    <Compile Include="Security\Processes\PrivilegeAndAttributesCollection.cs" />
+    <Compile Include="Security\Processes\PrivilegeEnabler.cs" />
+    <Compile Include="Security\Processes\Privileges.cs" />
+    <Compile Include="Security\Processes\ProcessExtensions.cs" />
+    <Compile Include="Security\Processes\ProcessHandle.cs" />
+    <Compile Include="Security\Principal\UAC.cs" />
+    <Compile Include="Security\AccessControl\WindowsStationAndDesktop.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Task Parallel\StreamExtensions.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent.Partitioners\EnumerablePartitioner.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent.Partitioners\ListPartitioner.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent.Partitioners\UserRangePartitioner.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\BlockingCollection.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\ConcurrentBag.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\ConcurrentDictionary.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\ConcurrentOrderedList.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\ConcurrentQueue.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\ConcurrentStack.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\IProducerConsumerCollection.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\OrderablePartitioner.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\Partitioner.cs" />
+    <Compile Include="Task Parallel\System.Collections.Concurrent\SplitOrderedList.cs" />
+    <Compile Include="Task Parallel\System.Collections.Generic\CollectionDebuggerView.cs" />
+    <Compile Include="Task Parallel\System.Collections.Generic\DefaultEqualityComparer.cs" />
+    <Compile Include="Task Parallel\System.Collections.Generic\GenericEqualityComparer.cs" />
+    <Compile Include="Task Parallel\System.Collections\IStructuralComparable.cs" />
+    <Compile Include="Task Parallel\System.Collections\IStructuralEquatable.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\AsyncStateMachineAttribute.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\AsyncTaskMethodBuilder.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\AsyncTaskMethodBuilder_T.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\AsyncVoidMethodBuilder.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\ConfiguredTaskAwaitable.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\ConfiguredTaskAwaitable_T.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\IAsyncStateMachine.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\ICriticalNotifyCompletion.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\INotifyCompletion.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\StateMachineAttribute.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\TaskAwaiter.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\TaskAwaiter_T.cs" />
+    <Compile Include="Task Parallel\System.Runtime.CompilerServices\YieldAwaitable.cs" />
+    <Compile Include="Task Parallel\System.Runtime.ExceptionServices\ExceptionDispatchInfo.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\CyclicDeque.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\IConcurrentDeque.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\PopResult.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\SynchronizationContextScheduler.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\Task.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskActionInvoker.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskCanceledException.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskCompletionQueue.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskCompletionSource.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskConstants.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskConstants_T.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskContinuation.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskContinuationOptions.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskCreationOptions.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskDebuggerView.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskExceptionSlot.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskExtensions.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskExtensionsImpl.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskFactory.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskFactory_T.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskScheduler.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskSchedulerException.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TaskStatus.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\Task_T.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\TpScheduler.cs" />
+    <Compile Include="Task Parallel\System.Threading.Tasks\UnobservedTaskExceptionEventArgs.cs" />
+    <Compile Include="Task Parallel\System.Threading\AtomicBoolean.cs" />
+    <Compile Include="Task Parallel\System.Threading\CancellationToken.cs" />
+    <Compile Include="Task Parallel\System.Threading\CancellationTokenRegistration.cs" />
+    <Compile Include="Task Parallel\System.Threading\CancellationTokenSource.cs" />
+    <Compile Include="Task Parallel\System.Threading\CountdownEvent.cs" />
+    <Compile Include="Task Parallel\System.Threading\ManualResetEventSlim.cs" />
+    <Compile Include="Task Parallel\System.Threading\SpinWait.cs" />
+    <Compile Include="Task Parallel\System.Threading\Watch.cs" />
+    <Compile Include="Task Parallel\System\AggregateException.cs" />
+    <Compile Include="Task Parallel\System\Funcs.cs" />
+    <Compile Include="Task Parallel\System\Lazy.cs" />
+    <Compile Include="Task Parallel\System\LazyThreadSafetyMode.cs" />
+    <Compile Include="Task Parallel\System\OperationCanceledException.cs" />
+    <Compile Include="Task Parallel\System\Tuple.cs" />
+    <Compile Include="Task Parallel\System\Tuples.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Link>README.md</Link>
+    </None>
+    <None Include="..\Scripts\helloInput.ps1">
+      <Link>helloInput.ps1</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Scripts\runtest.bat">
+      <Link>runtest.bat</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="publickey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>REM net start nxlog 2&gt;nul 1&gt;nul
+EXIT 0</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>net stop nxlog 2&gt;nul 1&gt;nul
+EXIT 0</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
