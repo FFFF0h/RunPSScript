@@ -56,7 +56,7 @@ Example Usage
             -Silent         Do not show any error messages.
             -Debug          Create a log file containing debug informations.
             -NoLogo         Starts without displaying the copyright banner.
-            -Hash           Generate a system unique hashed string.`
+            -Hash           Generate a system unique hashed string.
 
 * **Hash a password**
 
