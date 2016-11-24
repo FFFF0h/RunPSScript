@@ -23,6 +23,8 @@ Main Features
 
 Licenses
 --------
+Parts of this software are based on the following open-source libraries.
+
 | Module                   | Author                | License         |
 |--------------------------|-----------------------|-----------------|
 | RunPSScript              | Laurent Le Guillermic | 2016 Apache 2.0 |
