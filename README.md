@@ -63,6 +63,6 @@ Example Usage
 
         C:\>echo "This is an input pipeline" | RunPSScript -script "& {$Input | %{ $_ }; Exit $LastExitCode; }"
 
-* **Execute a PS script with elevated privileges every 1min30sec and do not report errors**
+* **Execute a PS script file with elevated privileges every 1min30sec and do not report errors**
 
         C:\>RunPSScript -script .\MyScript.ps1 -elevated -Schedule 1.5 -Silent
