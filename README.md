@@ -17,7 +17,7 @@ Main Features
  * **Output Pipeline** - The output pipeline of RunPSScript is the same one as the Powershell script.
  * **Elevated Privileges** - Can run the script with elevated privileges.
  * **Impersonation** - Can impersonate to a given user.
- * **Service and System Local account** - Can run under the System Local account and be called by a windows service.
+ * **Service and System Local account** - Can run under the System Local account and be called by a Windows service.
  * **Crypted Account Parameters** - Account related parameters are crypted and unique per system. No clear text domain, user name or password in config files.
  * **Scheduled Runs** - Can schedule runs at regular intervals.
 
