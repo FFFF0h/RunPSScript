@@ -68,6 +68,8 @@ namespace RunPSScript
 
         private int _childPID = 0;
         private bool _debug = false;
+        private bool _silent = false;
+        private int _processId = Process.GetCurrentProcess().Id;
 
         #region Properties
         /// <summary>
@@ -116,8 +118,6 @@ namespace RunPSScript
             Console.OutputEncoding = Encoding.ASCII;
             FileVersionInfo fvi = GetFileVersionInfo();
 
-            bool silent = false;
-
             try
             {
                 NetworkCredential credential = null;
@@ -128,7 +128,6 @@ namespace RunPSScript
                 string script = null;
                 bool isElevated = false;
                 int schedule = -1;
-                int processId = Process.GetCurrentProcess().Id;
                 bool passthrough = false;
                 bool hash = false;
                 bool nologo = false;
@@ -174,14 +173,14 @@ namespace RunPSScript
                                     schedule = (int)s;
                                 break;
                             case "-pid":
-                                processId = Convert.ToInt32(GetArgumentValue(options, ref i));
+                                _processId = Convert.ToInt32(GetArgumentValue(options, ref i));
                                 passthrough = true;
                                 break;
                             case "-stage":
                                 stage = (StageType)Enum.Parse(typeof(StageType), GetArgumentValue(options, ref i));
                                 break;
                             case "-silent":
-                                silent = true;
+                                _silent = true;
                                 break;
                             case "-debug":
                                 _debug = true;
@@ -286,7 +285,7 @@ namespace RunPSScript
                 {
                     if (!passthrough)
                     {
-                        server = GetNamePipeServer(script, processId);
+                        server = GetNamePipeServer(script, _processId);
                         server.Start();
                     }
                 }
@@ -311,7 +310,7 @@ namespace RunPSScript
                                     if (!passthrough)
                                     {
                                         param.Add("-pid");
-                                        param.Add(processId.ToString());
+                                        param.Add(_processId.ToString());
                                     }
 
                                     Log("ARGS CHILD : " + string.Join(" ", param.ToArray()));
@@ -341,7 +340,7 @@ namespace RunPSScript
                                     if (!passthrough)
                                     {
                                         param.Add("-pid");
-                                        param.Add(processId.ToString());
+                                        param.Add(_processId.ToString());
                                     }
 
                                     Log("ARGS CHILD : " + string.Join(" ", param.ToArray()));
@@ -358,7 +357,7 @@ namespace RunPSScript
                                     NamedPipeClient<String> client = null;
                                     if (passthrough)
                                     {
-                                        client = GetNamedPipeClientAndWaitForConnection(processId, out script);
+                                        client = GetNamedPipeClientAndWaitForConnection(_processId, out script);
                                     }
 
                                     // Runs the PS process
@@ -397,8 +396,8 @@ namespace RunPSScript
                     }
                     catch (Exception ex)
                     {
-                        if (!silent)
-                            Console.WriteLine("ERROR: {0}", ex.ToString());
+                        if (!_silent)
+                            Console.WriteLine("ERROR: {0}", ex.ToString().Replace(Environment.NewLine, " "));
                         Log("ERROR      : " + ex.ToString());
                     }
 
@@ -414,8 +413,8 @@ namespace RunPSScript
             }
             catch (Exception ex)
             {
-                if (!silent)
-                    Console.WriteLine("ERROR: {0}", ex.ToString());
+                if (!_silent)
+                    Console.WriteLine("ERROR: {0}", ex.ToString().Replace(Environment.NewLine, " "));
                 Log("ERROR      : " + ex.ToString());
             }
 
@@ -692,7 +691,48 @@ namespace RunPSScript
         #endregion
 
         #region Log to file
-        private static readonly object _lock = new object();
+        private readonly Queue<string> _logCache = new Queue<string>();
+        private EventWaitHandle _waitHandle;
+        
+        private EventWaitHandle WaitHandle
+        {
+            get
+            {
+                if (_waitHandle == null)
+                    _waitHandle = GetCrossProcessEventWaitHandle(NAMEDPIPES_NAME + _processId);
+
+                return _waitHandle;
+            }
+        }
+
+        /// <summary>
+        /// Gets the cross process event wait handle.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        private EventWaitHandle GetCrossProcessEventWaitHandle(string name)
+        {
+            if (!name.StartsWith("Global\\"))
+                name = "Global\\" + name;
+
+            EventWaitHandle waitHandle;
+            try
+            {
+                waitHandle = EventWaitHandle.OpenExisting(name, EventWaitHandleRights.Synchronize | EventWaitHandleRights.Modify);
+            }
+            catch (WaitHandleCannotBeOpenedException)
+            {
+                // Create a rule that allows any authenticated user to synchronise with us
+                var users = new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null);
+                var rule = new EventWaitHandleAccessRule(users, EventWaitHandleRights.Synchronize | EventWaitHandleRights.Modify, AccessControlType.Allow);
+                var security = new EventWaitHandleSecurity();
+                security.AddAccessRule(rule);
+                bool created;
+                waitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, name, out created, security);
+            }      
+
+            return waitHandle;
+        }
 
         /// <summary>
         /// Logs the specified message.
@@ -702,23 +742,37 @@ namespace RunPSScript
         {
             if (_debug)
             {
-                lock (_lock)
+                string data = string.Format("[{0}] {1}: {2}", DateTime.UtcNow.ToString("o"), Process.GetCurrentProcess().Id.ToString("D5"), message);
+                Debug.WriteLine(data);
+                try
                 {
-                    try
+                    if (WaitHandle.WaitOne(0))
                     {
-                        string data = string.Format("[{0}] {1}: {2}", DateTime.UtcNow.ToString("o"), Process.GetCurrentProcess().Id.ToString("D5"), message);
-                        Debug.WriteLine(data);
-
-                        string path = Assembly.GetExecutingAssembly().CodeBase.Replace("file:///", string.Empty);
-                        using (StreamWriter writer = new StreamWriter(path + ".log", true))
+                        string filePath = Assembly.GetExecutingAssembly().CodeBase.Replace("file:///", string.Empty) + ".log";
+                        using (FileStream file = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.Read))
+                        using (StreamWriter writer = new StreamWriter(file, Encoding.Unicode))
                         {
+                            while (_logCache.Count > 0)
+                                writer.WriteLine(_logCache.Dequeue());
+
                             writer.WriteLine(data);
                         }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Console.WriteLine("ERROR: " + ex.ToString());
+                        _logCache.Enqueue(data);
                     }
+                }
+                catch (Exception ex)
+                {
+                    _logCache.Enqueue(data);
+
+                    if (!_silent)
+                        Console.WriteLine("ERROR: " + ex.ToString().Replace(Environment.NewLine, " "));
+                }
+                finally
+                {
+                    WaitHandle.Set();
                 }
             }
         }

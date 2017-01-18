@@ -39,6 +39,7 @@ namespace System.Security.Principal
     public class WindowsImpersonation : IDisposable
     {
         private WindowsImpersonationContext _impersonationContext;
+        private string _userName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowsImpersonation"/> class.
@@ -78,6 +79,8 @@ namespace System.Security.Principal
                         _impersonationContext = tempWindowsIdentity.Impersonate();
                         if (_impersonationContext != null)
                         {
+                            _userName = userName;
+
                             Marshal.ZeroFreeGlobalAllocUnicode(passwordPtr);
                             NativeMethods.CloseHandle(token);
                             NativeMethods.CloseHandle(tokenDuplicate);
@@ -224,6 +227,17 @@ namespace System.Security.Principal
                 throw new Exception(Marshal.GetLastWin32Error().ToString());
             }
 
+            // Load Profile
+            PROFILEINFO pri = new PROFILEINFO();
+            pri.dwSize = Marshal.SizeOf(pri);
+            pri.lpUserName = _userName;
+            pri.dwFlags = 1;
+            if (!NativeMethods.LoadUserProfile(dupedToken, ref pri) && pri.hProfile == IntPtr.Zero)
+            {
+                NativeMethods.CloseHandle(dupedToken);
+                throw new Exception(Marshal.GetLastWin32Error().ToString());
+            }
+
             // Process Information
             PROCESS_INFORMATION pi = new PROCESS_INFORMATION();
 
@@ -279,6 +293,7 @@ namespace System.Security.Principal
                 NativeMethods.CloseHandle(pi.hThread);
             }
 
+            NativeMethods.UnloadUserProfile(token, pri.hProfile);
             //NativeMethods.CloseHandle(token);
             ret = NativeMethods.CloseHandle(dupedToken);
             if (ret == false)
